@@ -9,7 +9,7 @@
                 <h5 class="card-category">
                   每日違規次數
                 </h5>
-                <h2 class="card-title"> 不戴安全帽的人：</h2>
+                <h2 class="card-title">不戴安全帽的人：</h2>
               </div>
               <div class="col-sm-6">
                 <div
@@ -117,7 +117,7 @@
     </div>
     <div class="row">
       <div class="col-lg-12 col-md-12">
-        <card type="tasks" :header-classes="{ 'text-right': isRTL }">
+        <card type="tasks">
           <template slot="header">
             <h6 class="title d-inline">
               {{ $t("dashboard.tasks", { count: 5 }) }}
@@ -142,7 +142,7 @@
               }}</a>
             </base-dropdown>
           </template>
-          <div class="table-full-width table-responsive">
+          <div class="table-full-width">
             <task-list></task-list>
           </div>
         </card>
