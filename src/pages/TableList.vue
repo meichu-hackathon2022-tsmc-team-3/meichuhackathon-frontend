@@ -1,6 +1,6 @@
 <template>
   <div class="row">
-    <div class="col-12">
+    <!-- <div class="col-12">
       <card :title="table1.title">
         <div class="table-responsive">
           <base-table
@@ -11,8 +11,8 @@
           </base-table>
         </div>
       </card>
-    </div>
-
+    </div> -->
+    <h3>違規次數排行榜</h3>
     <div class="col-12">
       <card class="card-plain">
         <div class="table-full-width table-responsive">
@@ -30,56 +30,63 @@
 </template>
 <script>
 import { BaseTable } from "@/components";
-const tableColumns = ["Name", "department", "time", "status"];
+const tableColumns = ["id", "Name", "department", "time", "status"];
 const tableData = [
   {
     id: 1,
-    name: "Dakota Rice",
+    name: "沒戴安全帽人1",
     time: 5,
-    status: "notified",
-    department: "Oud-Turnhout"
+    pic: "https://fakeimg.pl/250/",
+    status: "已通知",
+    department: "部門1"
   },
   {
     id: 2,
-    name: "Minerva Hooper",
+    name: "沒戴安全帽人2",
     time: 3,
-    status: "notified",
-    department: "Sinaai-Waas"
+    pic: "https://fakeimg.pl/250/",
+    status: "未通知",
+    department: "部門2"
   },
   {
     id: 3,
-    name: "Sage Rodriguez",
+    name: "沒戴安全帽人3",
     time: 2,
-    status: "notified" ,
-    department: "Baileux"
+    pic: "https://fakeimg.pl/250/",
+    status: "已通知",
+    department: "部門3"
   },
   {
     id: 4,
-    name: "Philip Chaney",
-    time: 2,
-    status: "notified",
-    department: "Overland Park"
+    name: "沒戴安全帽人4",
+    time: 1,
+    pic: "https://fakeimg.pl/250/",
+    status: "未通知",
+    department: "部門1"
   },
   {
     id: 5,
-    name: "Doris Greene",
+    name: "沒戴安全帽人4",
     time: 1,
-    status: "notified",
-    department: "Feldkirchen in Kärnten"
+    pic: "https://fakeimg.pl/250/",
+    status: "未通知",
+    department: "部門1"
   },
   {
     id: 6,
-    name: "Mason Porter",
-    time: 3,
-    status: "notified",
-    department: "Gloucester"
+    name: "沒戴安全帽人4",
+    time: 1,
+    pic: "https://fakeimg.pl/250/",
+    status: "未通知",
+    department: "部門1"
   },
   {
     id: 7,
-    name: "Jon Porter",
-    time: 5,
-    status: "notified",
-    department: "Gloucester"
+    name: "沒戴安全帽人4",
+    time: 1,
+    pic: "https://fakeimg.pl/250/",
+    status: "未通知",
+    department: "部門1"
   }
 ];
 

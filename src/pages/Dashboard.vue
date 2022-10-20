@@ -7,9 +7,9 @@
             <div class="row">
               <div class="col-sm-6" :class="isRTL ? 'text-right' : 'text-left'">
                 <h5 class="card-category">
-                  {{ $t("dashboard.totalShipments") }}
+                  每日違規次數
                 </h5>
-                <h2 class="card-title">{{ $t("dashboard.performance") }}</h2>
+                <h2 class="card-title"> 不戴安全帽的人：</h2>
               </div>
               <div class="col-sm-6">
                 <div
@@ -116,7 +116,7 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-lg-6 col-md-12">
+      <div class="col-lg-12 col-md-12">
         <card type="tasks" :header-classes="{ 'text-right': isRTL }">
           <template slot="header">
             <h6 class="title d-inline">
@@ -144,16 +144,6 @@
           </template>
           <div class="table-full-width table-responsive">
             <task-list></task-list>
-          </div>
-        </card>
-      </div>
-      <div class="col-lg-6 col-md-12">
-        <card class="card" :header-classes="{ 'text-right': isRTL }">
-          <h4 slot="header" class="card-title">
-            {{ $t("dashboard.simpleTable") }}
-          </h4>
-          <div class="table-responsive">
-            <user-table></user-table>
           </div>
         </card>
       </div>

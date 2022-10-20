@@ -15,6 +15,9 @@
             v-if="hasValue(item, column)">
           {{itemValue(item, column)}}
         </td>
+        <td> <base-button type="info" size="sm" icon>
+              <i class="tim-icons icon-chat-33"></i>
+            </base-button></td>
       </slot>
     </tr>
     </tbody>
