@@ -21,9 +21,13 @@ import router from "./router/index";
 import BlackDashboard from "./plugins/blackDashboard";
 import i18n from "./i18n"
 import './registerServiceWorker'
+import { DatePicker, Table } from 'element-ui';
+import 'element-ui/lib/theme-chalk/index.css';
+
 Vue.use(BlackDashboard);
 Vue.use(VueRouter);
 Vue.use(RouterPrefetch);
+Vue.use(DatePicker, Table);
 
 /* eslint-disable no-new */
 new Vue({
