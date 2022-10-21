@@ -24,6 +24,13 @@ import './registerServiceWorker'
 import { DatePicker, Table } from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import axios from 'axios';
+import * as L from "leaflet";
+import "leaflet.pm";
+import "leaflet.pm/dist/leaflet.pm.css";
+
+Vue.config.productionTip = false;
+Vue.L = Vue.prototype.$L = L;
+
 // 載入 vue2-leaflet，依照自己需要載入組件
 import { LMap, LTileLayer, LMarker, LPopup, LIcon } from "vue2-leaflet";
 // 載入 css

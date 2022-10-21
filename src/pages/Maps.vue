@@ -1,42 +1,7 @@
 <template>
   <div id="app">
     <card type="plain" title="讓主管標示危險區域"> </card>
-    <!-- 初始化地圖設定 -->
-    <l-map
-      ref="myMap"
-      :zoom="zoom"
-      :center="center"
-      :options="options"
-      style="height: 60vh;"
-    >
-      <!-- 載入圖資 -->
-      <l-tile-layer :url="url" :attribution="attribution" />
-
-      <!-- 自己所在位置 -->
-      <l-marker ref="location" :lat-lng="center">
-        <l-popup>
-          你的位置
-        </l-popup>
-      </l-marker>
-      <!-- 創建標記點 -->
-      <l-marker :lat-lng="item.local" v-for="item in data" :key="item.id">
-        <!-- 標記點樣式判斷 -->
-        <l-icon
-          :icon-url="
-            item.name === '夢時代購物中心' ? icon.type.gold : icon.type.black
-          "
-          :shadow-url="icon.shadowUrl"
-          :icon-size="icon.iconSize"
-          :icon-anchor="icon.iconAnchor"
-          :popup-anchor="icon.popupAnchor"
-          :shadow-size="icon.shadowSize"
-        />
-        <!-- 彈出視窗 -->
-        <l-popup>
-          {{ item.name }}
-        </l-popup>
-      </l-marker>
-    </l-map>
+    <div class="map" id="map"></div>
   </div>
 </template>
 
@@ -45,29 +10,6 @@ export default {
   name: "App",
   data() {
     return {
-      // 模擬資料
-      data: [
-        {
-          id: 1,
-          name: "台積電七場",
-          local: [24.781359807477916, 120.99203026890879]
-        }
-      ],
-      circle: {
-        color: "#f00",
-        fillColor: "#f03",
-        fillOpacity: 0.5,
-        radius: 500,
-        center: [24.781359807477916, 120.99203026890879]
-      },
-
-      zoom: 13,
-      center: [22.612961, 120.304167],
-      url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-      attribution: `© <a href="http://osm.org/copyright">OpenStreetMap</a> contributors`,
-      options: {
-        zoomControl: false
-      },
       icon: {
         type: {
           black:
@@ -84,17 +26,86 @@ export default {
       }
     };
   },
-  mounted() {
-    // 等地圖創建後執行
+  created() {
     this.$nextTick(() => {
       // 獲得目前位置
       navigator.geolocation.getCurrentPosition(position => {
         const p = position.coords;
         // 將中心點設為目前的位置
         this.center = [p.latitude, p.longitude];
-        // 將目前的位置的標記點彈跳視窗打開
-        this.$refs.location.mapObject.openPopup();
+        console.log(p);
       });
+    });
+  },
+  mounted() {
+    this.$nextTick(() => {
+      // 獲得目前位置
+      navigator.geolocation.getCurrentPosition(position => {
+        const p = position.coords;
+        // 將中心點設為目前的位置
+        this.center = [p.latitude, p.longitude];
+        console.log(p);
+      });
+      // return p;
+    });
+    this.map = L.map("map", {
+      // get current position
+
+      center: [24.788992, 121.0023936], // center
+      zoom: 16, // 縮放
+      zoomControl: false,
+      doubleClickZoom: false,
+      attributionControl: false
+    });
+    let gaoDeLayer = L.tileLayer(
+      "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+    );
+    gaoDeLayer.addTo(this.map);
+    this.map.on("click", e => {
+      L.popup()
+        .setLatLng(e.latlng)
+        .setContent("You clicked the map at " + e.latlng.toString())
+        .openOn(this.map);
+    });
+    this.map.on("dblclick", e => {
+      L.popup()
+        .setLatLng(e.latlng)
+        .setContent("You double clicked the map at " + e.latlng.toString())
+        .openOn(this.map);
+    });
+    this.map.on("contextmenu", e => {
+      L.popup()
+        .setLatLng(e.latlng)
+        .setContent("You right clicked the map at " + e.latlng.toString())
+        .openOn(this.map);
+    });
+    this.map.pm.addControls({
+      position: "topleft",
+      drawPolygon: true,
+      drawMarker: true,
+      drawCircleMarker: true,
+      drawPolyline: true,
+      drawRectangle: true,
+      drawCircle: true,
+      drawText: true,
+      editMode: true,
+      dragMode: true,
+      cutPolygon: true,
+      removalMode: true
+    });
+    this.map.on("pm:drawstart", e => {
+      console.log(e, "start");
+    });
+    this.map.on("pm:drawend", e => {
+      console.log(e, "end");
+    });
+    this.map.on("pm:create", e => {
+      console.log(e, "finish");
+      if (e.shape == "Circle") {
+        console.log(e.layer._latlng, e.layer._radius, "座標");
+      } else {
+        console.log(e.layer._latlngs[0], "座標");
+      }
     });
   }
 };

@@ -1137,6 +1137,15 @@
     "@turf/helpers" "^6.5.0"
     "@turf/invariant" "^6.5.0"
 
+"@turf/difference@^6.0.2":
+  "integrity" "sha512-l8iR5uJqvI+5Fs6leNbhPY5t/a3vipUF/3AeVLpwPQcgmedNXyheYuy07PcMGH5Jdpi5gItOiTqwiU/bUH4b3A=="
+  "resolved" "https://registry.npmjs.org/@turf/difference/-/difference-6.5.0.tgz"
+  "version" "6.5.0"
+  dependencies:
+    "@turf/helpers" "^6.5.0"
+    "@turf/invariant" "^6.5.0"
+    "polygon-clipping" "^0.15.3"
+
 "@turf/distance@^6.5.0":
   "integrity" "sha512-xzykSLfoURec5qvQJcfifw/1mJa+5UwByZZ5TZ8iaqjGYN0vomhV9aiSLeYdUGtYRESZ+DYC/OzY+4RclZYgMg=="
   "resolved" "https://registry.npmjs.org/@turf/distance/-/distance-6.5.0.tgz"
@@ -1150,6 +1159,15 @@
   "resolved" "https://registry.npmjs.org/@turf/helpers/-/helpers-6.5.0.tgz"
   "version" "6.5.0"
 
+"@turf/intersect@^6.1.3":
+  "integrity" "sha512-2legGJeKrfFkzntcd4GouPugoqPUjexPZnOvfez+3SfIMrHvulw8qV8u7pfVyn2Yqs53yoVCEjS5sEpvQ5YRQg=="
+  "resolved" "https://registry.npmjs.org/@turf/intersect/-/intersect-6.5.0.tgz"
+  "version" "6.5.0"
+  dependencies:
+    "@turf/helpers" "^6.5.0"
+    "@turf/invariant" "^6.5.0"
+    "polygon-clipping" "^0.15.3"
+
 "@turf/invariant@^6.5.0":
   "integrity" "sha512-Wv8PRNCtPD31UVbdJE/KVAWKe7l6US+lJItRR/HOEW3eh+U/JwRCSUl/KZ7bmjM/C+zLNoreM2TU6OoLACs4eg=="
   "resolved" "https://registry.npmjs.org/@turf/invariant/-/invariant-6.5.0.tgz"
@@ -1157,7 +1175,7 @@
   dependencies:
     "@turf/helpers" "^6.5.0"
 
-"@turf/kinks@^6.5.0":
+"@turf/kinks@^6.5.0", "@turf/kinks@6.x":
   "integrity" "sha512-ViCngdPt1eEL7hYUHR2eHR662GvCgTc35ZJFaNR6kRtr6D8plLaDju0FILeFFWSc+o8e3fwxZEJKmFj9IzPiIQ=="
   "resolved" "https://registry.npmjs.org/@turf/kinks/-/kinks-6.5.0.tgz"
   "version" "6.5.0"
@@ -6076,7 +6094,17 @@
     "picocolors" "^1.0.0"
     "shell-quote" "^1.7.3"
 
-"leaflet@^1.2.0", "leaflet@^1.3.4":
+"leaflet.pm@^2.2.0":
+  "integrity" "sha512-y2qFh+1hEoZ2mJvrB6QTyWm+tusRhTCKLyTOoQBWIDXtYJowBm3sxHyt0jqft7vfaRXHtVwq016+FGH34CzKtg=="
+  "resolved" "https://registry.npmjs.org/leaflet.pm/-/leaflet.pm-2.2.0.tgz"
+  "version" "2.2.0"
+  dependencies:
+    "@turf/difference" "^6.0.2"
+    "@turf/intersect" "^6.1.3"
+    "@turf/kinks" "6.x"
+    "lodash" "^4.17.15"
+
+"leaflet@^1.2.0", "leaflet@^1.3.4", "leaflet@^1.9.2":
   "integrity" "sha512-Kc77HQvWO+y9y2oIs3dn5h5sy2kr3j41ewdqCMEUA4N89lgfUUfOBy7wnnHEstDpefiGFObq12FdopGRMx4J7g=="
   "resolved" "https://registry.npmjs.org/leaflet/-/leaflet-1.9.2.tgz"
   "version" "1.9.2"
@@ -7301,7 +7329,7 @@
   dependencies:
     "ts-pnp" "^1.1.6"
 
-"polygon-clipping@0.15.3":
+"polygon-clipping@^0.15.3", "polygon-clipping@0.15.3":
   "integrity" "sha512-ho0Xx5DLkgxRx/+n4O74XyJ67DcyN3Tu9bGYKsnTukGAW6ssnuak6Mwcyb1wHy9MZc9xsUWqIoiazkZB5weECg=="
   "resolved" "https://registry.npmjs.org/polygon-clipping/-/polygon-clipping-0.15.3.tgz"
   "version" "0.15.3"
