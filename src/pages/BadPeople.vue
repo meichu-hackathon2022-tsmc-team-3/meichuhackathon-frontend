@@ -10,13 +10,13 @@
         <select
           class="form-control bg-dark"
           style="font-size: 1rem;"
-          v-model="selected_department.id"
+          v-model="selected_department.did"
         >
           <option value="all">全選</option>
           <option
-            v-for="department in departmentData"
-            :key="department.id"
-            :value="department.id"
+            v-for="department in departments[0].detail"
+            :key="department.did"
+            :value="department.did"
           >
             {{ department.name }}
           </option>
@@ -25,7 +25,7 @@
       </base-input>
     </div>
     <!-- 列出所有部門 -->
-    <div v-if="selected_department.id == 'all'">
+    <div v-if="selected_department.did == 'all'">
       <div v-for="people in peopleData" :key="people.id">
         <div class="col-4 inline-block">
           <card style="width: 18rem;">
@@ -48,9 +48,9 @@
         </div>
       </div>
     </div>
-    <!-- <h1>{{selected_department}}</h1> -->
+    <!-- <h1>{{ selected_department }}</h1> -->
     <div v-for="people in peopleData" :key="people.id">
-      <div v-if="people.department == selected_department.id">
+      <div v-if="people.department == selected_department.did">
         <div class="col-4">
           <card style="width: 18rem;">
             <img
@@ -72,6 +72,7 @@
         </div>
       </div>
     </div>
+    {{ info }}
   </div>
 </template>
 <script>
@@ -83,12 +84,13 @@ export default {
   },
   data() {
     return {
+      info: null,
       type: ["", "info", "success", "warning", "danger"],
       notifications: {
         topCenter: false
       },
       selected_department: {
-        id: 1,
+        did: "all",
         name: "部門1"
       },
       departmentData: [
@@ -96,51 +98,74 @@ export default {
         { id: 2, name: "部門2" },
         { id: 3, name: "部門3" }
       ],
+      departments: [
+        {
+          detail: [
+            {
+              did: "D01",
+              name: "QA"
+            },
+            {
+              did: "D02",
+              name: "RD"
+            },
+            {
+              did: "D04",
+              name: "PM"
+            }
+          ]
+        }
+      ],
       peopleData: [
         {
           id: 1,
           name: "沒戴安全帽人1",
           pic: "https://fakeimg.pl/250/",
-          department: 1
+          department: "D01"
         },
         {
           id: 2,
           name: "沒戴安全帽人2",
           pic: "https://fakeimg.pl/250/",
-          department: 2
+          department: "D02"
         },
         {
           id: 3,
           name: "沒戴安全帽人3",
           pic: "https://fakeimg.pl/250/",
-          department: 3
+          department: "D01"
         },
         {
           id: 5,
           name: "沒戴安全帽人4",
           pic: "https://fakeimg.pl/250/",
-          department: 1
+          department: "D04"
         },
         {
           id: 6,
           name: "沒戴安全帽人4",
           pic: "https://fakeimg.pl/250/",
-          department: 1
+          department: "D01"
         },
         {
           id: 7,
           name: "沒戴安全帽人4",
           pic: "https://fakeimg.pl/250/",
-          department: 1
+          department: "D01"
         },
         {
           id: 8,
           name: "沒戴安全帽人4",
           pic: "https://fakeimg.pl/250/",
-          department: 1
+          department: "D03"
         }
       ]
     };
+  },
+  mounted() {
+    this.$http
+      .get("https://api.coindesk.com/v1/bpi/currentprice.json")
+      .then(response => (this.info = response));
   },
   methods: {
     notifyVue(verticalAlign, horizontalAlign) {
@@ -155,8 +180,26 @@ export default {
         message: "已通知!!!!"
       });
     }
+    // async getData() {
+    //   const url = "department";
+    //   let res = await this.$http.get(url);
+    //   this.departmentData = [...res]; // 透過ES6語法將res的內容直接繼承到tableData
+    //   console.log(res);
+    // try {
+    //   const response = await this.$http.get(
+    //     "http://localhost:5000/api/v1/department/"
+    //   );
+    //   // JSON responses are automatically parsed.
+    //   this.posts = response.data;
+    //   console.log(response.data);
+    // } catch (error) {
+    //   console.log(error);
+    // }
+    // }
   },
-  computed: {}
+  created() {
+    // this.getData();
+  }
 };
 </script>
 <style>

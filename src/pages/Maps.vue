@@ -1,272 +1,109 @@
 <template>
-  <card type="plain" title="讓主管標示危險區域 Google Maps">
-    <div id="map" class="map"></div>
-  </card>
+  <div id="app">
+    <card type="plain" title="讓主管標示危險區域"> </card>
+    <!-- 初始化地圖設定 -->
+    <l-map
+      ref="myMap"
+      :zoom="zoom"
+      :center="center"
+      :options="options"
+      style="height: 60vh;"
+    >
+      <!-- 載入圖資 -->
+      <l-tile-layer :url="url" :attribution="attribution" />
+
+      <!-- 自己所在位置 -->
+      <l-marker ref="location" :lat-lng="center">
+        <l-popup>
+          你的位置
+        </l-popup>
+      </l-marker>
+      <!-- 創建標記點 -->
+      <l-marker :lat-lng="item.local" v-for="item in data" :key="item.id">
+        <!-- 標記點樣式判斷 -->
+        <l-icon
+          :icon-url="
+            item.name === '夢時代購物中心' ? icon.type.gold : icon.type.black
+          "
+          :shadow-url="icon.shadowUrl"
+          :icon-size="icon.iconSize"
+          :icon-anchor="icon.iconAnchor"
+          :popup-anchor="icon.popupAnchor"
+          :shadow-size="icon.shadowSize"
+        />
+        <!-- 彈出視窗 -->
+        <l-popup>
+          {{ item.name }}
+        </l-popup>
+      </l-marker>
+    </l-map>
+  </div>
 </template>
+
 <script>
 export default {
-  mounted() {
-    let myLatlng = new window.google.maps.LatLng(40.748817, -73.985428);
-    let mapOptions = {
-      zoom: 13,
-      center: myLatlng,
-      scrollwheel: false, //we disable de scroll over the map, it is a really annoing when you scroll through page
-      styles: [
+  name: "App",
+  data() {
+    return {
+      // 模擬資料
+      data: [
         {
-          elementType: "geometry",
-          stylers: [
-            {
-              color: "#1d2c4d"
-            }
-          ]
-        },
-        {
-          elementType: "labels.text.fill",
-          stylers: [
-            {
-              color: "#8ec3b9"
-            }
-          ]
-        },
-        {
-          elementType: "labels.text.stroke",
-          stylers: [
-            {
-              color: "#1a3646"
-            }
-          ]
-        },
-        {
-          featureType: "administrative.country",
-          elementType: "geometry.stroke",
-          stylers: [
-            {
-              color: "#4b6878"
-            }
-          ]
-        },
-        {
-          featureType: "administrative.land_parcel",
-          elementType: "labels.text.fill",
-          stylers: [
-            {
-              color: "#64779e"
-            }
-          ]
-        },
-        {
-          featureType: "administrative.province",
-          elementType: "geometry.stroke",
-          stylers: [
-            {
-              color: "#4b6878"
-            }
-          ]
-        },
-        {
-          featureType: "landscape.man_made",
-          elementType: "geometry.stroke",
-          stylers: [
-            {
-              color: "#334e87"
-            }
-          ]
-        },
-        {
-          featureType: "landscape.natural",
-          elementType: "geometry",
-          stylers: [
-            {
-              color: "#023e58"
-            }
-          ]
-        },
-        {
-          featureType: "poi",
-          elementType: "geometry",
-          stylers: [
-            {
-              color: "#283d6a"
-            }
-          ]
-        },
-        {
-          featureType: "poi",
-          elementType: "labels.text.fill",
-          stylers: [
-            {
-              color: "#6f9ba5"
-            }
-          ]
-        },
-        {
-          featureType: "poi",
-          elementType: "labels.text.stroke",
-          stylers: [
-            {
-              color: "#1d2c4d"
-            }
-          ]
-        },
-        {
-          featureType: "poi.park",
-          elementType: "geometry.fill",
-          stylers: [
-            {
-              color: "#023e58"
-            }
-          ]
-        },
-        {
-          featureType: "poi.park",
-          elementType: "labels.text.fill",
-          stylers: [
-            {
-              color: "#3C7680"
-            }
-          ]
-        },
-        {
-          featureType: "road",
-          elementType: "geometry",
-          stylers: [
-            {
-              color: "#304a7d"
-            }
-          ]
-        },
-        {
-          featureType: "road",
-          elementType: "labels.text.fill",
-          stylers: [
-            {
-              color: "#98a5be"
-            }
-          ]
-        },
-        {
-          featureType: "road",
-          elementType: "labels.text.stroke",
-          stylers: [
-            {
-              color: "#1d2c4d"
-            }
-          ]
-        },
-        {
-          featureType: "road.highway",
-          elementType: "geometry",
-          stylers: [
-            {
-              color: "#2c6675"
-            }
-          ]
-        },
-        {
-          featureType: "road.highway",
-          elementType: "geometry.fill",
-          stylers: [
-            {
-              color: "#9d2a80"
-            }
-          ]
-        },
-        {
-          featureType: "road.highway",
-          elementType: "geometry.stroke",
-          stylers: [
-            {
-              color: "#9d2a80"
-            }
-          ]
-        },
-        {
-          featureType: "road.highway",
-          elementType: "labels.text.fill",
-          stylers: [
-            {
-              color: "#b0d5ce"
-            }
-          ]
-        },
-        {
-          featureType: "road.highway",
-          elementType: "labels.text.stroke",
-          stylers: [
-            {
-              color: "#023e58"
-            }
-          ]
-        },
-        {
-          featureType: "transit",
-          elementType: "labels.text.fill",
-          stylers: [
-            {
-              color: "#98a5be"
-            }
-          ]
-        },
-        {
-          featureType: "transit",
-          elementType: "labels.text.stroke",
-          stylers: [
-            {
-              color: "#1d2c4d"
-            }
-          ]
-        },
-        {
-          featureType: "transit.line",
-          elementType: "geometry.fill",
-          stylers: [
-            {
-              color: "#283d6a"
-            }
-          ]
-        },
-        {
-          featureType: "transit.station",
-          elementType: "geometry",
-          stylers: [
-            {
-              color: "#3a4762"
-            }
-          ]
-        },
-        {
-          featureType: "water",
-          elementType: "geometry",
-          stylers: [
-            {
-              color: "#0e1626"
-            }
-          ]
-        },
-        {
-          featureType: "water",
-          elementType: "labels.text.fill",
-          stylers: [
-            {
-              color: "#4e6d70"
-            }
-          ]
+          id: 1,
+          name: "台積電七場",
+          local: [24.781359807477916, 120.99203026890879]
         }
-      ]
+      ],
+      circle: {
+        color: "#f00",
+        fillColor: "#f03",
+        fillOpacity: 0.5,
+        radius: 500,
+        center: [24.781359807477916, 120.99203026890879]
+      },
+
+      zoom: 13,
+      center: [22.612961, 120.304167],
+      url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+      attribution: `© <a href="http://osm.org/copyright">OpenStreetMap</a> contributors`,
+      options: {
+        zoomControl: false
+      },
+      icon: {
+        type: {
+          black:
+            "https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-black.png",
+          gold:
+            "https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-gold.png"
+        },
+        shadowUrl:
+          "https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png",
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+        shadowSize: [41, 41]
+      }
     };
-    let map = new window.google.maps.Map(
-      document.getElementById("map"),
-      mapOptions
-    );
-
-    let marker = new window.google.maps.Marker({
-      position: myLatlng,
-      title: "Hello World!"
+  },
+  mounted() {
+    // 等地圖創建後執行
+    this.$nextTick(() => {
+      // 獲得目前位置
+      navigator.geolocation.getCurrentPosition(position => {
+        const p = position.coords;
+        // 將中心點設為目前的位置
+        this.center = [p.latitude, p.longitude];
+        // 將目前的位置的標記點彈跳視窗打開
+        this.$refs.location.mapObject.openPopup();
+      });
     });
-
-    // To add the marker to the map, call setMap();
-    marker.setMap(map);
   }
 };
 </script>
-<style></style>
+
+<style>
+html,
+body {
+  padding: 0;
+  margin: 0;
+}
+</style>
