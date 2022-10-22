@@ -1,0 +1,12 @@
+version: '3' 
+services:
+
+  app:
+    build: .
+    command: sh -c "npm run dev"
+    environment:
+      - NODE_OPTIONS=--openssl-legacy-provider
+    ports:
+      - 5380:8080
+    volumes:
+      - ${PWD}:/app
