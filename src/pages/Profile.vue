@@ -5,12 +5,12 @@
       </edit-profile-form>
     </div>
     <div class="col-md-4">
-      <user-card :user="user"></user-card>
+      <user-card :user="model"></user-card>
     </div>
   </div>
 </template>
 <script>
-  import EditProfileForm from './Profile/EditProfileForm';
+import EditProfileForm from './Profile/EditProfileForm';
   import UserCard from './Profile/UserCard'
   export default {
     components: {
@@ -19,23 +19,29 @@
     },
     data() {
       return {
-        model: {
-          company: 'Creative Code Inc.',
-          email: 'mike@email.com',
-          username: 'michael23',
-          firstName: 'Mike',
-          lastName: 'Andrew',
-          address: 'Bld Mihail Kogalniceanu, nr. 8 Bl 1, Sc 1, Ap 09',
-          city: 'Melbourne',
-          country: 'Australia',
-          about: 'Lamborghini Mercy, Your chick she so thirsty, I\'m in that two seat Lambo.'
-        },
-        user: {
-          fullName: 'Mike Andrew',
-          title: 'Ceo/Co-Founder',
-          description: `Do not be scared of the truth because we need to restart the human foundation in truth And I love you like Kanye loves Kanye I love Rick Owens’ bed design but the back is...`,
-        }
+        model: {}
       }
+    },
+    methods: {
+      async init(){
+        
+        const id = this.$route.query.id;
+        const event = (await this.$http.get(`${process.env.VUE_APP_EVENT_MANAGEMENT_URL}/event/id/${id}`)).data.detail;
+        const user = (await this.$http.get(`${process.env.VUE_APP_USER_MANAGEMENT_URL}/user/uid/${event.uid}`)).data.detail || {name: '', uid: ''}; 
+
+        this.model = {
+          id: event._id,
+          url: "https://fakeimg.pl/250/",
+          result: event.result == 'yellow' ? `${user.name} 在進入施工區未著裝完成` : "偵測到有人在施工區未戴安全帽",
+          time: new Date(event.time).toLocaleString()
+        }
+
+        console.log(this.model);
+
+      }
+    },
+    created() {
+      this.init();
     }
   }
 </script>

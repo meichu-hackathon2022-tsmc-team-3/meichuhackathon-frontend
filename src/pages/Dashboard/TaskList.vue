@@ -2,18 +2,17 @@
     <base-table :data="tableData"
                 thead-classes="text-primary">
       <template slot-scope="{row}">
-        <td>
-          <base-checkbox v-model="row.done">
-          </base-checkbox>
+        <td class="text-center">
+          <i 
+            v-bind:class="`fas fa-angle-${row.done ? 'down' : 'up'}`" 
+            v-bind:style="`color:${row.done ? 'green' : 'red'}; opacity:.5`"
+          ></i>
         </td>
-        <td>
+        <td class="pt-3">
           <p class="title">{{row.title}}</p>
-          <p class="text-muted">{{row.description}}</p>
         </td>
-        <td class="td-actions text-right">
-          <base-button type="link" aria-label="edit button">
-            <i class="tim-icons icon-pencil"></i>
-          </base-button>
+        <td class="pt-3">
+          <p class="title">{{row.description}}</p>
         </td>
       </template>
     </base-table>

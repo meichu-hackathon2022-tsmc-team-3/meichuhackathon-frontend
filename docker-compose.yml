@@ -6,6 +6,8 @@ services:
     command: sh -c "npm run dev"
     environment:
       - NODE_OPTIONS=--openssl-legacy-provider
+      - VUE_APP_USER_MANAGEMENT_URL=http://localhost:5000/api/v1
+      - VUE_APP_EVENT_MANAGEMENT_URL=http://localhost:5100/api/v1
     ports:
       - 5380:8080
     volumes:

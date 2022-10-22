@@ -5,35 +5,11 @@
         <card type="chart">
           <template slot="header">
             <div class="row">
-              <div class="col-sm-6" :class="isRTL ? 'text-right' : 'text-left'">
+              <div class="col" :class="isRTL ? 'text-right' : 'text-left'">
                 <h5 class="card-category">
-                  每日違規次數
+                  年統計 Yearly Statistics
                 </h5>
-                <h2 class="card-title">不戴安全帽的人：</h2>
-              </div>
-              <div class="col-sm-6">
-                <div
-                  class="btn-group btn-group-toggle"
-                  :class="isRTL ? 'float-left' : 'float-right'"
-                  data-toggle="buttons"
-                >
-                  <label
-                    v-for="(option, index) in bigLineChartCategories"
-                    :key="option"
-                    class="btn btn-sm btn-primary btn-simple"
-                    :class="{ active: bigLineChart.activeIndex === index }"
-                    :id="index"
-                  >
-                    <input
-                      type="radio"
-                      @click="initBigChart(index)"
-                      name="options"
-                      autocomplete="off"
-                      :checked="bigLineChart.activeIndex === index"
-                    />
-                    {{ option }}
-                  </label>
-                </div>
+                <h2 class="card-title">違規次數 Violation Counts：</h2>
               </div>
             </div>
           </template>
@@ -56,73 +32,9 @@
       <div class="col-lg-4" :class="{ 'text-right': isRTL }">
         <card type="chart">
           <template slot="header">
-            <h5 class="card-category">{{ $t("dashboard.totalShipments") }}</h5>
-            <h3 class="card-title">
-              <i class="tim-icons icon-bell-55 text-primary "></i> 763,215
-            </h3>
-          </template>
-          <div class="chart-area">
-            <line-chart
-              style="height: 100%"
-              chart-id="purple-line-chart"
-              :chart-data="purpleLineChart.chartData"
-              :gradient-colors="purpleLineChart.gradientColors"
-              :gradient-stops="purpleLineChart.gradientStops"
-              :extra-options="purpleLineChart.extraOptions"
-            >
-            </line-chart>
-          </div>
-        </card>
-      </div>
-      <div class="col-lg-4" :class="{ 'text-right': isRTL }">
-        <card type="chart">
-          <template slot="header">
-            <h5 class="card-category">{{ $t("dashboard.dailySales") }}</h5>
-            <h3 class="card-title">
-              <i class="tim-icons icon-delivery-fast text-info "></i> 3,500€
-            </h3>
-          </template>
-          <div class="chart-area">
-            <bar-chart
-              style="height: 100%"
-              chart-id="blue-bar-chart"
-              :chart-data="blueBarChart.chartData"
-              :gradient-stops="blueBarChart.gradientStops"
-              :extra-options="blueBarChart.extraOptions"
-            >
-            </bar-chart>
-          </div>
-        </card>
-      </div>
-      <div class="col-lg-4" :class="{ 'text-right': isRTL }">
-        <card type="chart">
-          <template slot="header">
-            <h5 class="card-category">{{ $t("dashboard.completedTasks") }}</h5>
-            <h3 class="card-title">
-              <i class="tim-icons icon-send text-success "></i> 12,100K
-            </h3>
-          </template>
-          <div class="chart-area">
-            <line-chart
-              style="height: 100%"
-              chart-id="green-line-chart"
-              :chart-data="greenLineChart.chartData"
-              :gradient-stops="greenLineChart.gradientStops"
-              :extra-options="greenLineChart.extraOptions"
-            >
-            </line-chart>
-          </div>
-        </card>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-lg-12 col-md-12">
-        <card type="tasks">
-          <template slot="header">
-            <h6 class="title d-inline">
-              {{ $t("dashboard.tasks", { count: 5 }) }}
-            </h6>
-            <p class="card-category d-inline">{{ $t("dashboard.today") }}</p>
+            <p class="card-category d-inline">
+              每月部門最高 Monthly Department Maximums
+            </p>
             <base-dropdown
               menu-on-right=""
               tag="div"
@@ -144,6 +56,46 @@
           </template>
           <div class="table-full-width">
             <task-list></task-list>
+          </div>
+        </card>
+      </div>
+      <div class="col-lg-4" :class="{ 'text-right': isRTL }">
+        <card type="chart">
+          <template slot="header">
+            <h5 class="card-category">
+              每月廠區最高 Monthly Fab Maximums
+            </h5>
+            <h3 class="card-title">
+              <i class="tim-icons icon-delivery-fast text-info "></i> 132
+            </h3>
+          </template>
+          <div class="chart-area">
+            <bar-chart
+              style="height: 100%"
+              chart-id="blue-bar-chart"
+              :chart-data="blueBarChart.chartData"
+              :gradient-stops="blueBarChart.gradientStops"
+              :extra-options="blueBarChart.extraOptions"
+            >
+            </bar-chart>
+          </div>
+        </card>
+      </div>
+      <div class="col-lg-4" :class="{ 'text-right': isRTL }">
+        <card type="chart">
+          <template slot="header">
+            <h5 class="card-category">
+              與上個月比較 Compare to last month  
+            </h5>
+            <h3 class="card-title">
+              <i class="text-success"></i> -28
+            </h3>
+          </template>
+          <div class="chart-area d-flex flex-row">
+            <i class="fas fa-angle-down mx-3" style="font-size: 8rem; margin-top: 2rem; color: green; opacity: .5;;"></i>
+            <div style="font-size: 8rem;">
+              5%
+            </div>
           </div>
         </card>
       </div>
@@ -169,7 +121,7 @@ export default {
     return {
       bigLineChart: {
         allData: [
-          [100, 70, 90, 70, 85, 60, 75, 60, 90, 80, 110, 100],
+          [100, 70, 90, 120, 85, 60, 75, 30, 90, 80, 120, 90],
           [80, 120, 105, 110, 95, 105, 90, 100, 80, 95, 70, 120],
           [60, 80, 65, 130, 80, 105, 90, 130, 70, 115, 60, 130]
         ],
@@ -255,16 +207,16 @@ export default {
       blueBarChart: {
         extraOptions: chartConfigs.barChartOptions,
         chartData: {
-          labels: ["USA", "GER", "AUS", "UK", "RO", "BR"],
+          labels: ["F3", "F7", "F12", "F2/5", "F18", "F15"],
           datasets: [
             {
-              label: "Countries",
+              label: "Fab",
               fill: true,
               borderColor: config.colors.info,
               borderWidth: 2,
               borderDash: [],
               borderDashOffset: 0.0,
-              data: [53, 20, 10, 80, 100, 45]
+              data: [23, 16, 19, 17, 26, 20]
             }
           ]
         },

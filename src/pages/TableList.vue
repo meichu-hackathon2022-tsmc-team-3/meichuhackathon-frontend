@@ -24,17 +24,17 @@
         <thead>
           <tr>
             <th class="click" @click="changeType('uid')">
-              company id
+              user id
               <span
                 class="icon"
                 :class="{ inverse: isReverse }"
-                v-if="sortType == 'id'"
+                v-if="sortType == 'uid'"
               >
                 <i class=" fas fa-angle-up text-success"></i>
               </span>
             </th>
             <th>name</th>
-            <th>department</th>
+            <th>email</th>
             <th class="click" @click="changeType('time')">
               time
               <span
@@ -45,7 +45,6 @@
                 <i class=" fas fa-angle-up text-success"></i>
               </span>
             </th>
-            <th>status</th>
             <th>alert</th>
           </tr>
           <tr v-for="item in events" :key="item.uid">
@@ -53,7 +52,6 @@
             <td>{{ item.name }}</td>
             <td>{{ item.email }}</td>
             <td>{{ item.count }}</td>
-            <td>{{ item.status }}</td>
             <td>
               <base-button
                 block
@@ -75,65 +73,6 @@ import NotificationTemplate from "./Notifications/NotificationTemplate";
 import { BaseAlertCustom } from "@/components";
 const tableColumns = ["id", "Name", "department", "time", "status"];
 
-let tableData = [
-  {
-    id: 1,
-    name: "沒戴安全帽人1",
-    time: 5,
-    pic: "https://fakeimg.pl/250/",
-    status: "已通知",
-    department: "部門1"
-  },
-  {
-    id: 2,
-    name: "沒戴安全帽人2",
-    time: 3,
-    pic: "https://fakeimg.pl/250/",
-    status: "未通知",
-    department: "部門2"
-  },
-  {
-    id: 3,
-    name: "沒戴安全帽人3",
-    time: 2,
-    pic: "https://fakeimg.pl/250/",
-    status: "已通知",
-    department: "部門3"
-  },
-  {
-    id: 4,
-    name: "沒戴安全帽人4",
-    time: 1,
-    pic: "https://fakeimg.pl/250/",
-    status: "未通知",
-    department: "部門1"
-  },
-  {
-    id: 5,
-    name: "沒戴安全帽人4",
-    time: 1,
-    pic: "https://fakeimg.pl/250/",
-    status: "未通知",
-    department: "部門1"
-  },
-  {
-    id: 6,
-    name: "沒戴安全帽人4",
-    time: 8,
-    pic: "https://fakeimg.pl/250/",
-    status: "未通知",
-    department: "部門1"
-  },
-  {
-    id: 7,
-    name: "沒戴安全帽人4",
-    time: 10,
-    pic: "https://fakeimg.pl/250/",
-    status: "未通知",
-    department: "部門1"
-  }
-];
-
 export default {
   components: {
     BaseAlertCustom
@@ -142,7 +81,6 @@ export default {
   // 印改變的物件
   watch: {
     select_date: function(val) {
-      console.log({ val });
       this.getEventByTime(val);
     }
   },
@@ -158,17 +96,13 @@ export default {
         status: "已通知" | "未通知"
       },
       type: ["", "info", "success", "warning", "danger"],
+      departments: {},
 
       select_date: "",
       sortType: "time",
       isReverse: false,
       start_date: Date.now(),
       end_date: Date.now(),
-      table2: {
-        title: "Table on Plain Background",
-        columns: [...tableColumns],
-        data: [...tableData]
-      },
       pickerOptions: {
         disabledDate(time) {
           return time.getTime() > Date.now();
@@ -214,6 +148,24 @@ export default {
         vm.isReverse = false;
       }
       vm.sortType = type;
+      
+      this.events = this.events.sort((a, b) => {
+        let result = 0
+
+        if (vm.sortType == 'time'){
+          result = a[vm.sortType].length - b[vm.sortType].length;
+        }else{
+          result = a[vm.sortType] - b[vm.sortType];
+        }
+
+        if (vm.isReverse){
+          result = - result;
+        }
+
+        return result;
+      });
+
+      console.log(this.events);
     },
     notifyVue(verticalAlign, horizontalAlign) {
       const color = Math.floor(Math.random() * 4 + 1);
@@ -229,10 +181,13 @@ export default {
     },
     // 獲得所有 event
     async getEvent() {
-      const user_url = "http://localhost:5000/api/v1/user";
-      let user_res = (await this.$http.get(user_url)).data.detail;
-      const url = "http://localhost:5100/api/v1/event";
-      let res = (await this.$http.get(url)).data.detail;
+      const user_url = `${process.env.VUE_APP_USER_MANAGEMENT_URL}/user`;
+      const user_res = (await this.$http.get(user_url)).data.detail;
+      const url = `${process.env.VUE_APP_EVENT_MANAGEMENT_URL}/event`;
+      const res = (await this.$http.get(url)).data.detail;
+      this.updateUser(user_res, res);
+    },
+    updateUser(user_res, res) {
 
       for (let i = 0; i < user_res.length; i++) {
         const tmp = res.filter(e => e.uid == user_res[i].uid);
@@ -242,17 +197,19 @@ export default {
           email: user_res[i].email,
           count: tmp.length,
           time: tmp.map(e => e.time),
-          status: "未通知"
+          did: user_res[i].departments
         });
       }
-      console.log("---event---");
+
       console.log(this.events);
+
+      this.events = this.events.filter(e => e.time != 0);
     },
     async getEventByTime(val) {
-      console.log(val[0], val[1]);
-      const user_url = "http://localhost:5000/api/v1/user";
-      let user_res = (await this.$http.get(user_url)).data.detail;
-      const url = "http://localhost:5100/api/v1/event/time";
+      this.events = [];
+      const user_url = `${process.env.VUE_APP_USER_MANAGEMENT_URL}/user`;
+      const user_res = (await this.$http.get(user_url)).data.detail;
+      const url = `${process.env.VUE_APP_EVENT_MANAGEMENT_URL}/event/time`
       this.AxiosParams = {
         params: {
           start: val[0],
@@ -260,90 +217,13 @@ export default {
         }
       };
 
-      let res = (await this.$http.get(url, this.AxiosParams)).data.detail;
-      console.log(user_res, res);
-      for (let i = 0; i < user_res.length; i++) {
-        const tmp = res.filter(e => e.uid == user_res[i].uid);
-        this.events_selected.push({
-          uid: user_res[i].uid,
-          name: user_res[i].name,
-          email: user_res[i].email,
-          count: tmp.length,
-          time: tmp.map(e => e.time),
-          status: "未通知"
-        });
-      }
-      console.log("---event by time---");
-      console.log(this.events_selected);
+      const res = (await this.$http.get(url, this.AxiosParams)).data.detail;
+      this.updateUser(user_res, res)
     },
     // 根據時間 filter data
-    async filterData(val) {
-      console.log("---filterDat.event---");
-      console.log(this.events);
-      console.log(val);
-      this.start_date = val[0];
-      this.end_date = val[1];
-      console.log("----tmp-----");
-      console.log(this.start_date, this.end_date);
-      this.events = this.events.filter(e => e.time.length > 0);
-      console.log("過濾 undefined");
-      console.log(this.events);
-
-      // 根據 time 的時間 filter data
-      // for (let i = 0; i < this.events.length; i++) {
-      //   this.events[i].time = this.events[i].time.filter(e => {
-      //     console.log(e);
-      //     e > this.start_date && e < this.end_date;
-      //   });
-      //   this.events[i].count = this.events[i].time.length;
-      //   console.log(this.events[i].time);
-      //   console.log(this.events[i].count);
-      // }
-      // let tmp = this.events.filter(e => {
-      //   console.log(e);
-      //   console.log(e.length);
-      //   e.time[0] >= this.start_date && e.time[1] <= this.end_date;
-      // });
-      // console.log(tmp);
-      // this.events = [];
-      // for (let i = 0; i < tmp.length; i++) {
-      //   const tmp2 = tmp.filter(e => e.uid == tmp[i].uid);
-      //   this.events.push({
-      //     uid: tmp[i].uid,
-      //     name: tmp[i].name,
-      //     email: tmp[i].email,
-      //     count: tmp2.length,
-      //     time: tmp2.map(e => e.time),
-      //     status: "未通知"
-      //   });
-      // }
-      console.log("---event------");
-
-      console.log(this.events);
-      // console.log(tableData);
-      // tableData = this.events;
-      // console.log(tableData);
-      console.log("---------");
-    }
-  },
-  computed: {
-    sortData: function() {
-      var vm = this;
-      var sortType = vm.sortType;
-      var isReverse = vm.isReverse;
-      var data = vm.table2.data;
-      var result = data.sort(function(a, b) {
-        return a[sortType] - b[sortType];
-      });
-      if (isReverse) {
-        result = result.reverse();
-      }
-      return result;
-    }
   },
   created() {
     this.getEvent();
-    // console.log(tableData);
   }
 };
 </script>
