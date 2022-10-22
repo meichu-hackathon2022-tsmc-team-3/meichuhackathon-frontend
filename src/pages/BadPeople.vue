@@ -164,28 +164,12 @@ export default {
       let res = await this.$http.get(url, this.AxiosParams);
 
       this.eventid_list.event_detail = res.data.detail;
-      // console.log("印事件詳情");
-      // console.log(this.eventid_list.event_detail);
       const url_user = "http://localhost:5000/api/v1/user/uid";
       for (let i = 0; i < this.eventid_list.event_detail.length; i++) {
-        // console.log("---------");
-        // console.log(this.eventid_list.event_detail[i].uid);
         const uid = this.eventid_list.event_detail[i].uid;
         let res_user = await this.$http.get(url_user + `/${uid}`);
-        // console.log("拿到 user 資料");
-        // console.log(res_user.data.detail);
         this.eventid_list.event_detail[i].user = res_user.data.detail;
       }
-      // console.log(this.eventid_list);
-      // localhost:5000/api/v1/user/uid/E010101
-      // let res_user = await this.$http.get(url_user, this.AxiosParams);
-      // console.log(res_user);
-
-      // console.log(this.user_list);
-
-      // 拿到 event id 後 call event 事件
-      // this.departments = res.data.detail;
-      // console.log(this.departments);
     }
   },
   created() {

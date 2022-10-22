@@ -17,12 +17,13 @@
     </div>
     <h2>{{ start_date[0] }}</h2>
     <h2>{{ start_date[1] }}</h2>
+    <!-- <h3>{{ events }}</h3> -->
     <div class="col-12 mt-5">
       <!-- 可以排序的 -->
       <table class="table">
         <thead>
           <tr>
-            <th class="click" @click="changeType('id')">
+            <th class="click" @click="changeType('uid')">
               company id
               <span
                 class="icon"
@@ -47,16 +48,21 @@
             <th>status</th>
             <th>alert</th>
           </tr>
-          <tr v-for="item in sortData" :key="item.id">
-            <td>{{ item.id }}</td>
+          <tr v-for="item in events" :key="item.uid">
+            <td>{{ item.uid }}</td>
             <td>{{ item.name }}</td>
-            <td>{{ item.department }}</td>
-            <td>{{ item.time }}</td>
+            <td>{{ item.email }}</td>
+            <td>{{ item.count }}</td>
             <td>{{ item.status }}</td>
             <td>
-              <base-button type="info" size="sm" icon>
-                <i class="tim-icons icon-chat-33"></i>
-              </base-button>
+              <base-button
+                block
+                @click="notifyVue('top', 'center')"
+                type="info"
+                size="sm"
+                icon
+                ><i class="tim-icons icon-chat-33"></i
+              ></base-button>
             </td>
           </tr>
         </thead>
@@ -65,9 +71,11 @@
   </div>
 </template>
 <script>
-import { Select } from "element-ui";
+import NotificationTemplate from "./Notifications/NotificationTemplate";
+import { BaseAlertCustom } from "@/components";
 const tableColumns = ["id", "Name", "department", "time", "status"];
-const tableData = [
+
+let tableData = [
   {
     id: 1,
     name: "沒戴安全帽人1",
@@ -127,15 +135,30 @@ const tableData = [
 ];
 
 export default {
+  components: {
+    BaseAlertCustom
+  },
   methods: {},
   // 印改變的物件
   watch: {
     select_date: function(val) {
       console.log({ val });
+      this.getEventByTime(val);
     }
   },
   data() {
     return {
+      events: [],
+      events_selected: [],
+      eventid_count: {
+        uid: String,
+        name: String,
+        department: String,
+        count: Number,
+        status: "已通知" | "未通知"
+      },
+      type: ["", "info", "success", "warning", "danger"],
+
       select_date: "",
       sortType: "time",
       isReverse: false,
@@ -182,7 +205,6 @@ export default {
       }
     };
   },
-  // 請在此撰寫 JavaScript
   methods: {
     changeType: function(type) {
       var vm = this;
@@ -192,6 +214,116 @@ export default {
         vm.isReverse = false;
       }
       vm.sortType = type;
+    },
+    notifyVue(verticalAlign, horizontalAlign) {
+      const color = Math.floor(Math.random() * 4 + 1);
+      this.$notify({
+        component: NotificationTemplate,
+        icon: "tim-icons icon-bell-55",
+        horizontalAlign: horizontalAlign,
+        verticalAlign: verticalAlign,
+        type: this.type[color],
+        timeout: 0,
+        message: "已通知!!!!"
+      });
+    },
+    // 獲得所有 event
+    async getEvent() {
+      const user_url = "http://localhost:5000/api/v1/user";
+      let user_res = (await this.$http.get(user_url)).data.detail;
+      const url = "http://localhost:5100/api/v1/event";
+      let res = (await this.$http.get(url)).data.detail;
+
+      for (let i = 0; i < user_res.length; i++) {
+        const tmp = res.filter(e => e.uid == user_res[i].uid);
+        this.events.push({
+          uid: user_res[i].uid,
+          name: user_res[i].name,
+          email: user_res[i].email,
+          count: tmp.length,
+          time: tmp.map(e => e.time),
+          status: "未通知"
+        });
+      }
+      console.log("---event---");
+      console.log(this.events);
+    },
+    async getEventByTime(val) {
+      console.log(val[0], val[1]);
+      const user_url = "http://localhost:5000/api/v1/user";
+      let user_res = (await this.$http.get(user_url)).data.detail;
+      const url = "http://localhost:5100/api/v1/event/time";
+      this.AxiosParams = {
+        params: {
+          start: val[0],
+          end: val[1]
+        }
+      };
+
+      let res = (await this.$http.get(url, this.AxiosParams)).data.detail;
+      console.log(user_res, res);
+      for (let i = 0; i < user_res.length; i++) {
+        const tmp = res.filter(e => e.uid == user_res[i].uid);
+        this.events_selected.push({
+          uid: user_res[i].uid,
+          name: user_res[i].name,
+          email: user_res[i].email,
+          count: tmp.length,
+          time: tmp.map(e => e.time),
+          status: "未通知"
+        });
+      }
+      console.log("---event by time---");
+      console.log(this.events_selected);
+    },
+    // 根據時間 filter data
+    async filterData(val) {
+      console.log("---filterDat.event---");
+      console.log(this.events);
+      console.log(val);
+      this.start_date = val[0];
+      this.end_date = val[1];
+      console.log("----tmp-----");
+      console.log(this.start_date, this.end_date);
+      this.events = this.events.filter(e => e.time.length > 0);
+      console.log("過濾 undefined");
+      console.log(this.events);
+
+      // 根據 time 的時間 filter data
+      // for (let i = 0; i < this.events.length; i++) {
+      //   this.events[i].time = this.events[i].time.filter(e => {
+      //     console.log(e);
+      //     e > this.start_date && e < this.end_date;
+      //   });
+      //   this.events[i].count = this.events[i].time.length;
+      //   console.log(this.events[i].time);
+      //   console.log(this.events[i].count);
+      // }
+      // let tmp = this.events.filter(e => {
+      //   console.log(e);
+      //   console.log(e.length);
+      //   e.time[0] >= this.start_date && e.time[1] <= this.end_date;
+      // });
+      // console.log(tmp);
+      // this.events = [];
+      // for (let i = 0; i < tmp.length; i++) {
+      //   const tmp2 = tmp.filter(e => e.uid == tmp[i].uid);
+      //   this.events.push({
+      //     uid: tmp[i].uid,
+      //     name: tmp[i].name,
+      //     email: tmp[i].email,
+      //     count: tmp2.length,
+      //     time: tmp2.map(e => e.time),
+      //     status: "未通知"
+      //   });
+      // }
+      console.log("---event------");
+
+      console.log(this.events);
+      // console.log(tableData);
+      // tableData = this.events;
+      // console.log(tableData);
+      console.log("---------");
     }
   },
   computed: {
@@ -208,6 +340,10 @@ export default {
       }
       return result;
     }
+  },
+  created() {
+    this.getEvent();
+    // console.log(tableData);
   }
 };
 </script>
