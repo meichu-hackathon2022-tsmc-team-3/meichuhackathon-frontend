@@ -1,7 +1,7 @@
 <template>
   <div class="row">
     <h3>違規次數排行榜</h3>
-    <h3>{{ select_date }}</h3>
+    <!-- <h3>{{ select_date }}</h3> -->
     <div class="col-12">
       <el-date-picker
         class="bg-dark"
@@ -15,8 +15,8 @@
       >
       </el-date-picker>
     </div>
-    <!-- <h2>{{ start_date[0] }}</h2> -->
-    <!-- <h2>{{ start_date[1] }}</h2> -->
+    <!-- <h2>{{ start_date[0] }}</h2>
+    <h2>{{ start_date[1] }}</h2> -->
     <!-- <h3>{{ events }}</h3> -->
     <div class="col-12 mt-5">
       <!-- 可以排序的 -->
