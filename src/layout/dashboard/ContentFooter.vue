@@ -8,11 +8,11 @@
         <li class="nav-item">
           <a class="nav-link" href="http://blog.creative-tim.com"> BEST </a>
         </li>
-        <li class="nav-item">
+        <!-- <li class="nav-item">
           <a class="nav-link" href="http://www.creative-tim.com/license">
             Licenses
           </a>
-        </li>
+        </li> -->
       </ul>
       <!-- <div class="copyright">
         © {{ year }} made with <i class="tim-icons icon-heart-2"></i> by
