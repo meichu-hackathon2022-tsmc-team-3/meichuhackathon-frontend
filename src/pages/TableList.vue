@@ -190,14 +190,20 @@ export default {
     updateUser(user_res, res) {
 
       for (let i = 0; i < user_res.length; i++) {
-        const tmp = res.filter(e => e.uid == user_res[i].uid);
+        const tmp = res.filter(
+          (e) =>
+            e.uid == user_res[i].uid &&
+            e.uid != "-1" &&
+            e.uid != "-2" &&
+            e.uid != "-3"
+        );
         this.events.push({
           uid: user_res[i].uid,
           name: user_res[i].name,
           email: user_res[i].email,
           count: tmp.length,
-          time: tmp.map(e => e.time),
-          did: user_res[i].departments
+          time: tmp.map((e) => e.time),
+          did: user_res[i].departments,
         });
       }
 
