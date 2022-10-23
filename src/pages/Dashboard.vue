@@ -6,7 +6,7 @@
           <template slot="header">
             <div class="row">
               <div class="col" :class="isRTL ? 'text-right' : 'text-left'">
-                <h5 class="card-category">
+                <h5 class="card-category text-white">
                   年統計 Yearly Statistics
                 </h5>
                 <h2 class="card-title">違規次數 Violation Counts：</h2>
@@ -32,27 +32,9 @@
       <div class="col-lg-4" :class="{ 'text-right': isRTL }">
         <card type="chart">
           <template slot="header">
-            <p class="card-category d-inline">
+            <p class="card-category d-inline text-white">
               每月部門最高 Monthly Department Maximums
             </p>
-            <base-dropdown
-              menu-on-right=""
-              tag="div"
-              title-classes="btn btn-link btn-icon"
-              aria-label="Settings menu"
-              :class="{ 'float-left': isRTL }"
-            >
-              <i slot="title" class="tim-icons icon-settings-gear-63"></i>
-              <a class="dropdown-item" href="#pablo">{{
-                $t("dashboard.dropdown.action")
-              }}</a>
-              <a class="dropdown-item" href="#pablo">{{
-                $t("dashboard.dropdown.anotherAction")
-              }}</a>
-              <a class="dropdown-item" href="#pablo">{{
-                $t("dashboard.dropdown.somethingElse")
-              }}</a>
-            </base-dropdown>
           </template>
           <div class="table-full-width">
             <task-list></task-list>
@@ -62,11 +44,11 @@
       <div class="col-lg-4" :class="{ 'text-right': isRTL }">
         <card type="chart">
           <template slot="header">
-            <h5 class="card-category">
+            <h5 class="card-category text-white">
               每月廠區最高 Monthly Fab Maximums
             </h5>
             <h3 class="card-title">
-              <i class="tim-icons icon-delivery-fast text-info "></i> 132
+              <i class="tim-icons icon-delivery-fast text-info"></i> 132
             </h3>
           </template>
           <div class="chart-area">
@@ -84,18 +66,25 @@
       <div class="col-lg-4" :class="{ 'text-right': isRTL }">
         <card type="chart">
           <template slot="header">
-            <h5 class="card-category">
-              與上個月比較 Compare to last month  
+            <h5 class="card-category text-white">
+              與上個月比較 Compare to last month
             </h5>
-            <h3 class="card-title">
-              <i class="text-success"></i> -28
+            <h3 class="card-title" style="color: #42f548">
+              <i class="fas fa-angle-down mx-3"></i>
+              <i class="fa-duotone fa-down"></i>-28
             </h3>
           </template>
           <div class="chart-area d-flex flex-row">
-            <i class="fas fa-angle-down mx-3" style="font-size: 8rem; margin-top: 2rem; color: green; opacity: .5;;"></i>
-            <div style="font-size: 8rem;">
-              5%
-            </div>
+            <i
+              class="fas fa-angle-down mx-3"
+              style="
+                font-size: 8rem;
+                margin-top: 2rem;
+                color: #42f548;
+                opacity: 0.5; ;
+              "
+            ></i>
+            <div style="font-size: 8rem">5%</div>
           </div>
         </card>
       </div>
@@ -115,7 +104,7 @@ export default {
     LineChart,
     BarChart,
     TaskList,
-    UserTable
+    UserTable,
   },
   data() {
     return {
@@ -123,7 +112,7 @@ export default {
         allData: [
           [100, 70, 90, 120, 85, 60, 75, 30, 90, 80, 120, 90],
           [80, 120, 105, 110, 95, 105, 90, 100, 80, 95, 70, 120],
-          [60, 80, 65, 130, 80, 105, 90, 130, 70, 115, 60, 130]
+          [60, 80, 65, 130, 80, 105, 90, 130, 70, 115, 60, 130],
         ],
         activeIndex: 0,
         chartData: {
@@ -140,13 +129,13 @@ export default {
             "SEP",
             "OCT",
             "NOV",
-            "DEC"
-          ]
+            "DEC",
+          ],
         },
         extraOptions: chartConfigs.purpleChartOptions,
         gradientColors: config.colors.primaryGradient,
         gradientStops: [1, 0.4, 0],
-        categories: []
+        categories: [],
       },
       purpleLineChart: {
         extraOptions: chartConfigs.purpleChartOptions,
@@ -167,12 +156,12 @@ export default {
               pointHoverRadius: 4,
               pointHoverBorderWidth: 15,
               pointRadius: 4,
-              data: [80, 100, 70, 80, 120, 80]
-            }
-          ]
+              data: [80, 100, 70, 80, 120, 80],
+            },
+          ],
         },
         gradientColors: config.colors.primaryGradient,
-        gradientStops: [1, 0.2, 0]
+        gradientStops: [1, 0.2, 0],
       },
       greenLineChart: {
         extraOptions: chartConfigs.greenChartOptions,
@@ -193,21 +182,21 @@ export default {
               pointHoverRadius: 4,
               pointHoverBorderWidth: 15,
               pointRadius: 4,
-              data: [90, 27, 60, 12, 80]
-            }
-          ]
+              data: [90, 27, 60, 12, 80],
+            },
+          ],
         },
         gradientColors: [
           "rgba(66,134,121,0.15)",
           "rgba(66,134,121,0.0)",
-          "rgba(66,134,121,0)"
+          "rgba(66,134,121,0)",
         ],
-        gradientStops: [1, 0.4, 0]
+        gradientStops: [1, 0.4, 0],
       },
       blueBarChart: {
         extraOptions: chartConfigs.barChartOptions,
         chartData: {
-          labels: ["F3", "F7", "F12", "F2/5", "F18", "F15"],
+          labels: ["F3", "F7", "F12", "F2", "F18", "F15"],
           datasets: [
             {
               label: "Fab",
@@ -216,13 +205,13 @@ export default {
               borderWidth: 2,
               borderDash: [],
               borderDashOffset: 0.0,
-              data: [23, 16, 19, 17, 26, 20]
-            }
-          ]
+              data: [23, 16, 19, 17, 26, 20],
+            },
+          ],
         },
         gradientColors: config.colors.primaryGradient,
-        gradientStops: [1, 0.4, 0]
-      }
+        gradientStops: [1, 0.4, 0],
+      },
     };
   },
   computed: {
@@ -234,7 +223,7 @@ export default {
     },
     bigLineChartCategories() {
       return this.$t("dashboard.chartCategories");
-    }
+    },
   },
   methods: {
     initBigChart(index) {
@@ -253,8 +242,8 @@ export default {
             pointHoverRadius: 4,
             pointHoverBorderWidth: 15,
             pointRadius: 4,
-            data: this.bigLineChart.allData[index]
-          }
+            data: this.bigLineChart.allData[index],
+          },
         ],
         labels: [
           "JAN",
@@ -268,13 +257,13 @@ export default {
           "SEP",
           "OCT",
           "NOV",
-          "DEC"
-        ]
+          "DEC",
+        ],
       };
       this.$refs.bigChart.updateGradients(chartData);
       this.bigLineChart.chartData = chartData;
       this.bigLineChart.activeIndex = index;
-    }
+    },
   },
   mounted() {
     this.i18n = this.$i18n;
@@ -289,7 +278,7 @@ export default {
       this.i18n.locale = "en";
       this.$rtl.disableRTL();
     }
-  }
+  },
 };
 </script>
 <style></style>
