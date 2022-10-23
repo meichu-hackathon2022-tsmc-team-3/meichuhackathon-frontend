@@ -53,12 +53,12 @@
                 type="primary"
                 block
                 @click="notifyVue('top', 'center')"
-                >通知主管</base-button
-              >
-            </a>
-          </card>
-        </div>
+              >查看詳情</base-button
+            >
+          </a>
+        </card>
       </div>
+    </div>
   </div>
 </template>
 <script>
