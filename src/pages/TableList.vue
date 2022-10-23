@@ -15,8 +15,8 @@
       >
       </el-date-picker>
     </div>
-    <h2>{{ start_date[0] }}</h2>
-    <h2>{{ start_date[1] }}</h2>
+    <!-- <h2>{{ start_date[0] }}</h2> -->
+    <!-- <h2>{{ start_date[1] }}</h2> -->
     <!-- <h3>{{ events }}</h3> -->
     <div class="col-12 mt-5">
       <!-- 可以排序的 -->
