@@ -36,8 +36,8 @@
                 v-bind:src="event.url"
                 alt="Card image cap"
               />
-              <p class="card-text">
-                辨識結果：
+            <p class="card-text mt-2">
+              辨識結果：
                 <span style="color: orange ;" v-if="event.result == 'yellow'">
                   情節輕微</span
                 >
